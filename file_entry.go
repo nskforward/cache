@@ -2,6 +2,7 @@ package cache
 
 import (
 	"io"
+	"net/http"
 	"os"
 	"sync"
 	"time"
@@ -98,4 +99,8 @@ func (en *FileEntry) Read(w io.Writer) error {
 	defer f.Close()
 	_, err = io.Copy(w, f)
 	return err
+}
+
+func (entry *FileEntry) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, entry.path)
 }
